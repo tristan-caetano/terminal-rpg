@@ -8,17 +8,18 @@ void viewTrees(std::stack<Tree> treeStack);
 void mainMenu(Player player);
 Player createPlayer();
 
-
-int main(){
+int main()
+{
 
     // Displaying the main menu for the user
     mainMenu(createPlayer());
-    
-    return(0);
+
+    return (0);
 }
 
 // Main Menu
-void mainMenu(Player player){
+void mainMenu(Player player)
+{
 
     // Declaring variables
     bool toContinue = true;
@@ -26,17 +27,18 @@ void mainMenu(Player player){
     std::stack<Tree> treeStack;
 
     // Do While loop that displays the menu
-    do{
+    do
+    {
         std::cout << "\n*********TREE MENU**********"
-             << "\nWhat would you like to do?"
-             << "\n1). FIGHT!"
-             << "\n2). Create a new tree. (100 M)"
-             << "\n3). View Trees."
-             << "\n4). Save Trees to File"
-             << "\n5). Buy Wood Bandages. (50 M)"
-             << "\n6). View Inventory."
-             << "\n7). Quit. (All progress will be lost.)"
-             << "\n*********TREE MENU**********\n";
+                  << "\nWhat would you like to do?\n"
+                  << "\n1). FIGHT!"
+                  << "\n2). Create a new tree. (100 M)"
+                  << "\n3). View Trees."
+                  << "\n4). Save Trees to File"
+                  << "\n5). Buy Wood Bandages. (50 M)"
+                  << "\n6). View Inventory."
+                  << "\n7). Quit. (All progress will be lost.)"
+                  << "\n*********TREE MENU**********\n";
 
         // Getting user input for menu selection
         std::cin >> userIn;
@@ -44,52 +46,83 @@ void mainMenu(Player player){
         // Switch statement that sends the user where they want to go
         switch (userIn)
         {
-        case 1: 
-            fightPhase(treeStack, player);
-                break;
+        case 1:
+            if (!treeStack.empty())
+            {
+                fightPhase(treeStack, player);
+            }
+            else
+            {
+                std::cout << "\nYou have no trees goofy!\n";
+            }
+            break;
         case 2:
-            if(player.getMoney() > 99){
+            if (player.getMoney() > 99)
+            {
                 player.setMoney(-100);
                 treeStack.push(getUserTree());
-            }else{
+                std::cout << "\n"
+                          << !treeStack.empty();
+            }
+            else
+            {
                 std::cout << "\nYou don't have enough cash money bro.\n";
             }
             break;
         case 3:
-            viewTrees(treeStack);
+            if (!treeStack.empty())
+            {
+                viewTrees(treeStack);
+            }
+            else
+            {
+                std::cout << "\nYou have no trees goofy!\n";
+            }
             break;
         case 4:
             saveTrees(treeStack);
             break;
         case 5:
-            if(player.getMoney() > 49){
+            if (player.getMoney() > 49)
+            {
                 player.setMoney(-50);
                 player.setWoodBandages(1);
                 std::cout << "\nYou bought a wood bandage, you now have " << player.getWoodBandages() << ".\n";
-            }else{
+            }
+            else
+            {
                 std::cout << "\nYou don't have enough cash money bro.\n";
             }
             break;
         case 6:
-            std::cout << "\nWood Bandages: " << player.getWoodBandages() << "\nMoney: " << player.getMoney();
+            std::cout << "\nWood Bandages: " << player.getWoodBandages() << "\nMoney: " << player.getMoney() << "\n";
             break;
         case 7:
             toContinue = false;
             break;
-        default: std::cout << "\nBro that is NOT an option.\n"; break;
+        default:
+            std::cout << "\nBro that is NOT an option.\n";
+            break;
         }
-    }while(toContinue);
-
+    } while (toContinue);
 }
 
 // Printing tree info
-void printTreeInfo(Tree tree){
-    std::cout << "\nTree Type: " << tree.getType() << "\nTree Length: " << tree.getLength() << "\n";
+void printTreeInfo(Tree tree)
+{
+    std::cout << tree.getType()
+              << "\nLength: " << tree.getLength()
+              << "\nBark: " << tree.getBark()
+              << "\nDefense: " << tree.getDefense()
+              << "\nAccuracy: " << tree.getMaxAccuracy()
+              << "\nEvasiveness: " << tree.getMaxEvasiveness()
+              << "\n";
 }
 
 // Asking user for the tree info
-Tree getUserTree(){
-    
+Tree getUserTree()
+{
+
     // Declaring Variables
     int length;
     std::string type;
@@ -99,13 +132,12 @@ Tree getUserTree(){
     std::cin >> type;
 
     // Making sure the user sets an appropriate height for the tree
-    do{
-
+    do
+    {
         std::cout << "\nHow tall is the tree (ft)?\n(Choose a value between 1 and 100 inclusive.)\n";
         std::cin >> length;
 
-
-    }while((length > 101) || (length < 0));
+    } while ((length > 101) || (length < 0));
 
     // Creating tree object
     Tree tree(type, length);
@@ -115,7 +147,8 @@ Tree getUserTree(){
 }
 
 // Saving all created trees to a file
-void saveTrees(std::stack<Tree> treeStack){
+void saveTrees(std::stack<Tree> treeStack)
+{
 
     // Declaring variables
     Tree tree;
@@ -123,7 +156,8 @@ void saveTrees(std::stack<Tree> treeStack){
     file.open("Trees.tc");
 
     // Treestack is saved until its empty
-    while(!treeStack.empty()){
+    while (!treeStack.empty())
+    {
 
         // Getting top value, then popping it off the stack
         tree = treeStack.top();
@@ -137,31 +171,37 @@ void saveTrees(std::stack<Tree> treeStack){
     // Closing the file
     file.close();
 
-    // Telling user the file was output to successfully 
+    // Telling user the file was output to successfully
     std::cout << "\nFile Tree.tf was created!\n";
-
 }
 
 // Printing a list of all trees input by user
-void viewTrees(std::stack<Tree> treeStack){
-
+void viewTrees(std::stack<Tree> treeStack)
+{
+    std::cout << "\nCHECK1\n";
     // Declaring variables
     int i = 1;
     Tree tree;
     char waste;
+    std::cout << "\n"
+              << (treeStack.top().getType());
 
     // Treestack is output until its empty
-    while(!treeStack.empty()){
+    while (true)
+    {
 
+        std::cout << "\nLOOP1\n";
         // Getting top value, then popping it off the stack
         tree = treeStack.top();
         treeStack.pop();
 
+        std::cout << "\nPRINT\n";
         // Printing tree
-        std::cout << "\n" << i << ").";
+        std::cout << "\n"
+                  << i << "). ";
         printTreeInfo(tree);
         i++;
-}
+    }
 
     // Waiting for user input to go back to the main menu
     std::cout << "\nEnter [Q] to continue back to the main menu.\n";
@@ -169,12 +209,12 @@ void viewTrees(std::stack<Tree> treeStack){
 }
 
 // Creating Player
-Player createPlayer(){
+Player createPlayer()
+{
     std::string playerName;
     std::cout << "\nWhat is your name?\n";
     std::cin >> playerName;
     Player player(playerName, 3, 100);
 
     return player;
-    
 }
