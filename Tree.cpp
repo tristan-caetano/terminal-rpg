@@ -81,15 +81,12 @@ void Tree::setStats()
     defMax = length;
 
     accMax = 101 - (rand() % length);
-    std::cout << "\nAcc: " << accMax;
 
-    srand(time(NULL));
+    srand(time(0));
     evaMax = 101 - (rand() % length);
-    std::cout << "\nEva: " << evaMax;
 
-    srand(time(NULL));
+    srand(time(0));
     currBark = rand() % (maxBark + 1);
-    std::cout << "\nBark: " << currBark;
 }
 
 // Healing tree

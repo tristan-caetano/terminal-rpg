@@ -178,29 +178,20 @@ void saveTrees(std::stack<Tree> treeStack)
 // Printing a list of all trees input by user
 void viewTrees(std::stack<Tree> treeStack)
 {
-    std::cout << "\nCHECK1\n";
     // Declaring variables
     int i = 1;
-    Tree tree;
     char waste;
-    std::cout << "\n"
-              << (treeStack.top().getType());
 
     // Treestack is output until its empty
-    while (true)
+    while (!treeStack.empty())
     {
-
-        std::cout << "\nLOOP1\n";
-        // Getting top value, then popping it off the stack
-        tree = treeStack.top();
-        treeStack.pop();
-
-        std::cout << "\nPRINT\n";
+        
         // Printing tree
         std::cout << "\n"
                   << i << "). ";
-        printTreeInfo(tree);
+        printTreeInfo(treeStack.top());
         i++;
+        treeStack.pop();
     }
 
     // Waiting for user input to go back to the main menu
@@ -214,7 +205,7 @@ Player createPlayer()
     std::string playerName;
     std::cout << "\nWhat is your name?\n";
     std::cin >> playerName;
-    Player player(playerName, 3, 100);
+    Player player(playerName, 3, 1000);
 
     return player;
 }

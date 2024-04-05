@@ -101,9 +101,22 @@ std::stack<Tree> getEnemies(int numOfEnemies)
     for (i = 0; i < numOfEnemies; i++)
     {
         // Creating tree object
-        srand(time(0));
+        srand(time(NULL));
         Tree tree(enemyNames[rand() % 7], rand() % 101);
+
+        if(!enemyStack.empty()){
+
+            while((tree.getType()) == (enemyStack.top().getType())){
+
+                srand(time(NULL));
+                Tree tree(enemyNames[rand() % 7], rand() % 101);
+
+            }
+        }
+
         enemyStack.push(tree);
+
+        
     }
 
     return enemyStack;
