@@ -39,7 +39,7 @@ void fightPhase(std::stack<Tree> &treeStack, Player &player)
             std::cout << "\nYikes, " << enemyCurTree.getType() << " chopped your " << playerCurrTree.getType() << ", and it lost " << playerCurrTree.barkLost(enemyCurTree) << " bark.\n";
             break;
         case 2:
-            player.setWoodBandages(-1);
+            player.setWoodBandages(player.getWoodBandages() - 1);
             playerCurrTree.gainBark(player);
             std::cout << "\nYou gave your " << playerCurrTree.getType() << " a wood bandage.\nIt now has " << playerCurrTree.getBark() << " bark.";
             break;
@@ -68,6 +68,7 @@ void fightPhase(std::stack<Tree> &treeStack, Player &player)
         // If the current enemy tree dies and the enemy still has trees left, get the next one
         if (!enemyStack.empty() && enemyCurTree.getBark() < 1)
         {
+            player.setTreesChopped(player.getTreesChopped() + 1);
             std::cout << "You chopped " << enemyCurTree.getType() << "!\n";
             enemyCurTree = enemyStack.top();
             enemyStack.pop();
@@ -77,9 +78,10 @@ void fightPhase(std::stack<Tree> &treeStack, Player &player)
         // If the current enemy tree dies, and the enemy doesn't have another tree, they lose
         else if (enemyStack.empty() && enemyCurTree.getBark() < 1)
         {
+            player.setTreesChopped(player.getTreesChopped() + 1);
             std::cout << "\nYou chopped all the enemy trees! It's epic time. B)\n";
             std::cout << "You got " << enemyTotalHealth << " money! Very cool.\n";
-            player.setMoney(enemyTotalHealth);
+            player.setMoney(player.getMoney() + enemyTotalHealth);
             treeStack.push(playerCurrTree);
             fight = false;
         }

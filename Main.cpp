@@ -3,7 +3,8 @@
 // Prototyping
 void printTreeInfo(Tree tree);
 Tree getUserTree();
-void saveTrees(std::stack<Tree> treeStack);
+void saveGame(std::stack<Tree> treeStack, Player player);
+void loadGame(std::stack<Tree> &treeStack, Player &player);
 void viewTrees(std::stack<Tree> treeStack);
 void mainMenu(Player player);
 Player createPlayer();
@@ -34,10 +35,11 @@ void mainMenu(Player player)
                   << "\n1). FIGHT!"
                   << "\n2). Create a new tree. (100 M)"
                   << "\n3). View Trees."
-                  << "\n4). Save Trees to File"
-                  << "\n5). Buy Wood Bandages. (50 M)"
-                  << "\n6). View Inventory."
-                  << "\n7). Quit. (All progress will be lost.)"
+                  << "\n4). Buy Wood Bandages. (50 M)"
+                  << "\n5). View Inventory."
+                  << "\n6). Save game to file."
+                  << "\n7). Load game from file."
+                  << "\n8). Quit. (Unsaved progress will be lost.)"
                   << "\n*********TREE MENU**********\n";
 
         // Getting user input for menu selection
@@ -46,6 +48,7 @@ void mainMenu(Player player)
         // Switch statement that sends the user where they want to go
         switch (userIn)
         {
+            // FIGHT!
         case 1:
             if (!treeStack.empty())
             {
@@ -56,10 +59,11 @@ void mainMenu(Player player)
                 std::cout << "\nYou have no trees goofy!\n";
             }
             break;
+            // Create a new tree.
         case 2:
             if (player.getMoney() > 99)
             {
-                player.setMoney(-100);
+                player.setMoney(player.getMoney() - 100);
                 treeStack.push(getUserTree());
                 std::cout << "\n"
                           << !treeStack.empty();
@@ -69,6 +73,7 @@ void mainMenu(Player player)
                 std::cout << "\nYou don't have enough cash money bro.\n";
             }
             break;
+            // View trees.
         case 3:
             if (!treeStack.empty())
             {
@@ -79,14 +84,12 @@ void mainMenu(Player player)
                 std::cout << "\nYou have no trees goofy!\n";
             }
             break;
+            // Buy Wood Bandages.
         case 4:
-            saveTrees(treeStack);
-            break;
-        case 5:
             if (player.getMoney() > 49)
             {
-                player.setMoney(-50);
-                player.setWoodBandages(1);
+                player.setMoney(player.getMoney() - 50);
+                player.setWoodBandages(player.getWoodBandages() -1);
                 std::cout << "\nYou bought a wood bandage, you now have " << player.getWoodBandages() << ".\n";
             }
             else
@@ -94,10 +97,20 @@ void mainMenu(Player player)
                 std::cout << "\nYou don't have enough cash money bro.\n";
             }
             break;
-        case 6:
+            // View Inventory
+        case 5:
             std::cout << "\nWood Bandages: " << player.getWoodBandages() << "\nMoney: " << player.getMoney() << "\n";
             break;
-        case 7:
+            // Save game to file
+        case 6:
+            saveGame(treeStack, player);
+            break;
+            // Load save from file
+        case 7:  
+            loadGame(treeStack, player);
+            break;
+            // Quit
+        case 8:
             toContinue = false;
             break;
         default:
@@ -113,7 +126,7 @@ void printTreeInfo(Tree tree)
     std::cout << tree.getType()
               << "\nLength: " << tree.getLength()
               << "\nBark: " << tree.getBark()
-              << "\nDefense: " << tree.getDefense()
+              << "\nDefense: " << tree.getMaxDefense()
               << "\nAccuracy: " << tree.getMaxAccuracy()
               << "\nEvasiveness: " << tree.getMaxEvasiveness()
               << "\n";
@@ -147,25 +160,36 @@ Tree getUserTree()
 }
 
 // Saving all created trees to a file
-void saveTrees(std::stack<Tree> treeStack)
+void saveGame(std::stack<Tree> treeStack, Player player)
 {
 
     // Declaring variables
-    Tree tree;
-    std::ofstream file;
-    file.open("Trees.tc");
+    std::fstream file;
+    file.open("Trees.tc", std::ios::in);
+
+    // Saving Player
+    file << player.getName() << "\n";
+    file << player.getTreesChopped() << "\n";
+    file << player.getMoney() << "\n";
+    file << player.getWoodBandages() << "\n";
 
     // Treestack is saved until its empty
     while (!treeStack.empty())
     {
-
         // Getting top value, then popping it off the stack
-        tree = treeStack.top();
+        Tree tree = treeStack.top();
         treeStack.pop();
 
         // Saving data of popped tree to the file
         file << tree.getType() << "\n";
         file << tree.getLength() << "\n";
+        file << tree.getBark() << "\n";
+        file << tree.getMaxAttack() << "\n";
+        file << tree.getMaxDefense() << "\n";
+        file << tree.getMaxAccuracy() << "\n";
+        file << tree.getMaxEvasiveness() << "\n";
+        file << tree.getIsTiny() << "\n";
+        file << tree.getIsHuge() << "\n";
     }
 
     // Closing the file
@@ -173,6 +197,73 @@ void saveTrees(std::stack<Tree> treeStack)
 
     // Telling user the file was output to successfully
     std::cout << "\nFile Tree.tf was created!\n";
+}
+
+// Saving all created trees to a file
+void loadGame(std::stack<Tree> &treeStack, Player &player)
+{
+    // Declaring variables
+    std::fstream file;
+    file.open("Trees.tc", std::ios::in);
+    std::string nameStr, tempStr;
+    int tempInt[6];
+    bool tempBool[2];
+
+    
+    // Saving Player
+    std::getline(file, tempStr);
+    player.setName(tempStr);
+
+    std::getline(file, tempStr);
+    player.setTreesChopped(stoi(tempStr));
+
+    std::getline(file, tempStr);
+    player.setMoney(stoi(tempStr));
+
+    std::getline(file, tempStr);
+    player.setWoodBandages(stoi(tempStr));
+
+    Tree tree("TEMP", 99);
+
+    tempStr = "1";
+
+    
+
+    // Treestack is saved until its empty
+    while (tempStr != "")
+    {
+
+        // Saving data of popped tree to the file
+        std::getline(file, nameStr);
+        std::getline(file, tempStr);
+        tempInt[0] = stoi(tempStr);
+        std::getline(file, tempStr);
+        tempInt[1] = stoi(tempStr);
+        std::getline(file, tempStr);
+        tempInt[2] = stoi(tempStr);
+        std::getline(file, tempStr);
+        tempInt[3] = stoi(tempStr);
+        std::getline(file, tempStr);
+        tempInt[4] = stoi(tempStr);
+        std::getline(file, tempStr);
+        tempInt[5] = stoi(tempStr);
+        std::getline(file, tempStr);
+        tempBool[0] = stoi(tempStr);
+        std::getline(file, tempStr);
+        tempBool[1] = stoi(tempStr);
+
+        tree.setStatsManually(nameStr, tempInt[0], tempInt[1], tempInt[2], tempInt[3], tempInt[4], tempInt[5], tempBool[0], tempBool[1]);
+
+        std::getline(file, tempStr);
+
+        treeStack.push(tree);
+    }
+
+    // Letting user know that the file loaded correctly
+    std::cout << "\nFile loaded successfully\n";
+
+    // Closing the file
+    file.close();
 }
 
 // Printing a list of all trees input by user

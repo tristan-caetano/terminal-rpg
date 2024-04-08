@@ -35,9 +35,13 @@ public:
     int getBark();
     int barkLost(Tree playerTree);
     void gainBark(Player player);
+    int getMaxAttack();
+    int getMaxDefense();
     int getMaxAccuracy();
-    int getDefense();
     int getMaxEvasiveness();
+    bool getIsTiny();
+    bool getIsHuge();
+    void setStatsManually(std::string type, int length, int currBark, int attMax, int defMax, int accMax, int evaMax, bool veryTall, bool veryShort);
 };
 
 // ***************************************************************************************
@@ -48,7 +52,7 @@ class Player
 
 private:
     std::string name;
-    int woodBandages, money;
+    int woodBandages, money, treesChopped = 0;
 
 public:
     Player(std::string name, int woodBandages, int money)
@@ -61,8 +65,11 @@ public:
     std::string getName();
     int getWoodBandages();
     int getMoney();
+    int getTreesChopped();
+    void setName(std::string name);
     void setWoodBandages(int woodBandages);
     void setMoney(int money);
+    void setTreesChopped(int treesChopped);
 };
 
 void fightPhase(std::stack<Tree> &treeStack, Player &player);

@@ -8,20 +8,41 @@
 // Returning tree type
 std::string Tree::getType() { return type; }
 
-// Returning tree length
+// Get tree length
 int Tree::getLength() { return length; }
 
-// Returning health
+// Get health
 int Tree::getBark() { return currBark; }
 
-// Returning defense
-int Tree::getDefense() { return defMax; }
+// Get max attack
+int Tree::getMaxAttack(){ return attMax; }
 
-// Returning max accuracy
+// Get defense
+int Tree::getMaxDefense() { return defMax; }
+
+// Get max accuracy
 int Tree::getMaxAccuracy() { return accMax; }
 
-// Returning max evasiveness
+// Get max evasiveness
 int Tree::getMaxEvasiveness() { return evaMax; }
+
+// Get if tree is big or small
+bool Tree::getIsTiny(){ return veryShort; }
+bool Tree::getIsHuge(){ return veryTall; }
+
+
+// Setter for everything
+void Tree::setStatsManually(std::string type, int length, int currBark, int attMax, int defMax, int accMax, int evaMax, bool veryTall, bool veryShort){
+    this->type = type;
+    this->length = length;
+    this->currBark = currBark;
+    this->attMax = attMax;
+    this->defMax = defMax;
+    this->accMax = accMax;
+    this->evaMax = evaMax;
+    this->veryTall = veryTall;
+    this->veryShort = veryShort;
+}
 
 // Calculating damage inflicted
 int Tree::attack()
@@ -120,8 +141,17 @@ int Player::getWoodBandages() { return woodBandages; };
 // Returning money
 int Player::getMoney() { return money; };
 
+// Returning Trees Chopped
+int Player::getTreesChopped(){ return treesChopped; }
+
+// Set player name manually from save
+void Player::setName(std::string name){ this->name = name; }
+
 // Adding healing items
-void Player::setWoodBandages(int woodBandages) { this->woodBandages += woodBandages; };
+void Player::setWoodBandages(int woodBandages) { this->woodBandages = woodBandages; }
 
 // Adding money
-void Player::setMoney(int money) { this->money += money; };
+void Player::setMoney(int money) { this->money = money; }
+
+// Setting trees chopped
+void Player::setTreesChopped(int treesChopped){ this->treesChopped = treesChopped;}
