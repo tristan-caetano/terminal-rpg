@@ -128,6 +128,9 @@ void Tree::gainBark(Player player)
     }
 }
 
+// Set health manually
+void Tree::setBark(int currBark){ this->currBark = currBark; }
+
 // ***************************************************************************************
 // PLAYER CLASS PROPERTIES
 // ***************************************************************************************
@@ -144,6 +147,9 @@ int Player::getMoney() { return money; };
 // Returning Trees Chopped
 int Player::getTreesChopped(){ return treesChopped; }
 
+// Getting the current seed
+Seed Player::getSeed(){ return seed; }
+
 // Set player name manually from save
 void Player::setName(std::string name){ this->name = name; }
 
@@ -155,3 +161,17 @@ void Player::setMoney(int money) { this->money = money; }
 
 // Setting trees chopped
 void Player::setTreesChopped(int treesChopped){ this->treesChopped = treesChopped;}
+
+// Setting the seed for the player
+void Player::setSeed(Seed seed){ this->seed = seed; }
+
+// ***************************************************************************************
+// SEED CLASS PROPERTIES
+// ***************************************************************************************
+
+Tree HealthSeed::seedSkill(Tree tree){
+        
+        tree.setBark(tree.getBark() * 2);
+        used = true;
+        return tree;
+    }

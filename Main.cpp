@@ -22,6 +22,8 @@ int main()
 void mainMenu(Player player)
 {
 
+    HealthSeed seeder;
+    player.setSeed(seeder);
     // Declaring variables
     bool toContinue = true;
     int userIn;
@@ -35,7 +37,7 @@ void mainMenu(Player player)
                   << "\n1). FIGHT!"
                   << "\n2). Create a new tree. (100 M)"
                   << "\n3). View Trees."
-                  << "\n4). Buy Wood Bandages. (50 M)"
+                  << "\n4). Go to the store."
                   << "\n5). View Inventory."
                   << "\n6). Save game to file."
                   << "\n7). Load game from file."
@@ -86,16 +88,7 @@ void mainMenu(Player player)
             break;
             // Buy Wood Bandages.
         case 4:
-            if (player.getMoney() > 49)
-            {
-                player.setMoney(player.getMoney() - 50);
-                player.setWoodBandages(player.getWoodBandages() -1);
-                std::cout << "\nYou bought a wood bandage, you now have " << player.getWoodBandages() << ".\n";
-            }
-            else
-            {
-                std::cout << "\nYou don't have enough cash money bro.\n";
-            }
+            store(treeStack, player);
             break;
             // View Inventory
         case 5:
@@ -165,7 +158,7 @@ void saveGame(std::stack<Tree> treeStack, Player player)
 
     // Declaring variables
     std::fstream file;
-    file.open("Trees.tc", std::ios::in);
+    file.open("Trees.tc", std::ios::out);
 
     // Saving Player
     file << player.getName() << "\n";
@@ -196,19 +189,19 @@ void saveGame(std::stack<Tree> treeStack, Player player)
     file.close();
 
     // Telling user the file was output to successfully
-    std::cout << "\nFile Tree.tf was created!\n";
+    std::cout << "\nFile Tree.tc was created!\n";
 }
 
 // Saving all created trees to a file
 void loadGame(std::stack<Tree> &treeStack, Player &player)
 {
+
     // Declaring variables
     std::fstream file;
     file.open("Trees.tc", std::ios::in);
-    std::string nameStr, tempStr;
+    std::string nameStr = "INIT", tempStr;
     int tempInt[6];
     bool tempBool[2];
-
     
     // Saving Player
     std::getline(file, tempStr);
@@ -227,36 +220,37 @@ void loadGame(std::stack<Tree> &treeStack, Player &player)
 
     tempStr = "1";
 
-    
-
     // Treestack is saved until its empty
-    while (tempStr != "")
+    while (nameStr != "")
     {
+
 
         // Saving data of popped tree to the file
         std::getline(file, nameStr);
-        std::getline(file, tempStr);
-        tempInt[0] = stoi(tempStr);
-        std::getline(file, tempStr);
-        tempInt[1] = stoi(tempStr);
-        std::getline(file, tempStr);
-        tempInt[2] = stoi(tempStr);
-        std::getline(file, tempStr);
-        tempInt[3] = stoi(tempStr);
-        std::getline(file, tempStr);
-        tempInt[4] = stoi(tempStr);
-        std::getline(file, tempStr);
-        tempInt[5] = stoi(tempStr);
-        std::getline(file, tempStr);
-        tempBool[0] = stoi(tempStr);
-        std::getline(file, tempStr);
-        tempBool[1] = stoi(tempStr);
+        if(nameStr != ""){
 
-        tree.setStatsManually(nameStr, tempInt[0], tempInt[1], tempInt[2], tempInt[3], tempInt[4], tempInt[5], tempBool[0], tempBool[1]);
+            std::getline(file, tempStr);
+            tempInt[0] = stoi(tempStr);
+            std::getline(file, tempStr);
+            tempInt[1] = stoi(tempStr);
+            std::getline(file, tempStr);
+            tempInt[2] = stoi(tempStr);
+            std::getline(file, tempStr);
+            tempInt[3] = stoi(tempStr);
+            std::getline(file, tempStr);
+            tempInt[4] = stoi(tempStr);
+            std::getline(file, tempStr);
+            tempInt[5] = stoi(tempStr);
+            std::getline(file, tempStr);
+            tempBool[0] = stoi(tempStr);
+            std::getline(file, tempStr);
+            tempBool[1] = stoi(tempStr);
 
-        std::getline(file, tempStr);
+            tree.setStatsManually(nameStr, tempInt[0], tempInt[1], tempInt[2], tempInt[3], tempInt[4], tempInt[5], tempBool[0], tempBool[1]);
+            treeStack.push(tree);
+        }
 
-        treeStack.push(tree);
+        
     }
 
     // Letting user know that the file loaded correctly
