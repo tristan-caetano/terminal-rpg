@@ -81,6 +81,8 @@ public:
 void fightPhase(std::stack<Tree> &treeStack, Player &player);
 std::stack<Tree> getEnemies(int numOfEnemies);
 
+void store(std::stack<Tree> &treeStack, Player &player);
+
 // ***************************************************************************************
 // SEED CLASSES
 // ***************************************************************************************
