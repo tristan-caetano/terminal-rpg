@@ -76,8 +76,6 @@ int Tree::barkLost(Tree playerTree)
 void Tree::setStats()
 {
 
-    srand(time(NULL));
-
     // Determining tree height extremes for additional attributes
     if (length >= 90)
     {
@@ -103,10 +101,8 @@ void Tree::setStats()
 
     accMax = 101 - (rand() % length);
 
-    srand(time(0));
     evaMax = 101 - (rand() % length);
 
-    srand(time(0));
     currBark = rand() % (maxBark + 1);
 }
 
@@ -131,6 +127,12 @@ void Tree::gainBark(Player player)
 // Set health manually
 void Tree::setBark(int currBark){ this->currBark = currBark; }
 
+// Setting max attack manually
+void Tree::setAttack(int attMax){ this->accMax = attMax; }
+
+// Setting max defense manually
+void Tree::setDefense(int defMax){ this->defMax = defMax; }
+
 // ***************************************************************************************
 // PLAYER CLASS PROPERTIES
 // ***************************************************************************************
@@ -148,7 +150,7 @@ int Player::getMoney() { return money; };
 int Player::getTreesChopped(){ return treesChopped; }
 
 // Getting the current seed
-Seed Player::getSeed(){ return seed; }
+Seed Player::getSeed(){ return pSeed; }
 
 // Set player name manually from save
 void Player::setName(std::string name){ this->name = name; }
@@ -163,15 +165,59 @@ void Player::setMoney(int money) { this->money = money; }
 void Player::setTreesChopped(int treesChopped){ this->treesChopped = treesChopped;}
 
 // Setting the seed for the player
-void Player::setSeed(Seed seed){ this->seed = seed; }
+void Player::setSeed(Seed seed){ this->pSeed = seed; }
 
 // ***************************************************************************************
 // SEED CLASS PROPERTIES
 // ***************************************************************************************
 
+// Resetting the seed use for the next round
+Tree Seed::seedSkill(Tree tree){std::cout << "\nYou don't have a seed.\n"; return tree; }
+void Seed::resetSeed(){ used = false; }
+std::string Seed::getName(){ return seedName; }
+int Seed::getLoadIndicator(){ return seedLoadIndicator; }
+void Seed::cringe(){ std::cout << "norm"; }
+
+// Health seed skill doubles health for the current tree
 Tree HealthSeed::seedSkill(Tree tree){
-        
+    if(!used){   
         tree.setBark(tree.getBark() * 2);
         used = true;
+        return tree;
+    }else{
+            std::cout << "You already used this seed during this battle."; 
+    }
+
+    return tree;
+
+    }
+void HealthSeed::cringe(){ std::cout << "bruhhealth"; }
+
+// Attack seed doubles the attack of the current tree
+Tree AttackSeed::seedSkill(Tree tree){
+        
+    if(!used){    
+        tree.setAttack(tree.getMaxAttack() * 2);
+        used = true;
+        return tree;
+    }else{
+        std::cout << "You already used this seed during this battle."; 
+    }    
+
+    return tree;
+
+    }
+
+// Defense seed doubles the defense of the current tree
+Tree DefenseSeed::seedSkill(Tree tree){
+        
+        if(!used){
+            tree.setDefense(tree.getMaxDefense() * 2);
+            used = true;
+            return tree;
+        }else{
+            std::cout << "You already used this seed during this battle."; 
+        }
+
         return tree;
     }

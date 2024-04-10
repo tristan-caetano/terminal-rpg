@@ -9,7 +9,9 @@
 class Seed;
 class Tree;
 class Player;
-
+class HealthSeed;
+class AttackSeed;
+class DefenseSeed;
 
 // ***************************************************************************************
 // TREE CLASS
@@ -44,7 +46,62 @@ public:
     bool getIsTiny();
     bool getIsHuge();
     void setBark(int currBark);
+    void setAttack(int attMax);
+    void setDefense(int defMax);
     void setStatsManually(std::string type, int length, int currBark, int attMax, int defMax, int accMax, int evaMax, bool veryTall, bool veryShort);
+};
+
+// ***************************************************************************************
+// SEED CLASSES
+// ***************************************************************************************
+class Seed{
+    protected:
+        bool used;
+        int seedLoadIndicator;
+        std::string seedName;
+    public:
+        Seed(){
+            seedName = "No Seed";
+            seedLoadIndicator = 0;
+        }
+        Tree seedSkill(Tree tree);
+        void resetSeed();
+        int getLoadIndicator();
+        std::string getName();
+        void cringe();
+
+};
+
+class HealthSeed : public Seed{
+
+    public:
+        HealthSeed(){
+            seedName = "Health Seed";
+            seedLoadIndicator = 1;
+        }
+
+        Tree seedSkill(Tree tree);
+        void cringe();
+};
+
+class AttackSeed : public Seed{
+    public:
+        AttackSeed(){
+                seedName = "Attack Seed";
+                seedLoadIndicator = 2;
+            }
+
+        Tree seedSkill(Tree tree);
+};
+
+class DefenseSeed : public Seed{
+    public:
+        DefenseSeed(){
+                seedName = "Defense Seed";
+                seedLoadIndicator = 3;
+            }
+
+        Tree seedSkill(Tree tree);
 };
 
 // ***************************************************************************************
@@ -56,7 +113,7 @@ class Player
 private:
     std::string name;
     int woodBandages, money, treesChopped = 0;
-    Seed seed;
+    Seed pSeed;
 
 public:
     Player(std::string name, int woodBandages, int money)
@@ -70,6 +127,8 @@ public:
     int getWoodBandages();
     int getMoney();
     int getTreesChopped();
+
+    // TODO: I think this is messing it up
     Seed getSeed();
     void setName(std::string name);
     void setWoodBandages(int woodBandages);
@@ -80,19 +139,4 @@ public:
 
 void fightPhase(std::stack<Tree> &treeStack, Player &player);
 std::stack<Tree> getEnemies(int numOfEnemies);
-
 void store(std::stack<Tree> &treeStack, Player &player);
-
-// ***************************************************************************************
-// SEED CLASSES
-// ***************************************************************************************
-class Seed{
-    protected:
-        bool used;
-
-   virtual Tree seedSkill(Tree tree);
-};
-
-class HealthSeed : public Seed{
-   virtual Tree seedSkill(Tree tree);
-};

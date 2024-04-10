@@ -8,10 +8,12 @@ void loadGame(std::stack<Tree> &treeStack, Player &player);
 void viewTrees(std::stack<Tree> treeStack);
 void mainMenu(Player player);
 Player createPlayer();
+void loadSeed(int seedLoadIndicator, Player &player);
 
 int main()
 {
 
+    srand(time(0));
     // Displaying the main menu for the user
     mainMenu(createPlayer());
 
@@ -22,8 +24,6 @@ int main()
 void mainMenu(Player player)
 {
 
-    HealthSeed seeder;
-    player.setSeed(seeder);
     // Declaring variables
     bool toContinue = true;
     int userIn;
@@ -88,11 +88,11 @@ void mainMenu(Player player)
             break;
             // Buy Wood Bandages.
         case 4:
-            store(treeStack, player);
+            //store(treeStack, player);
             break;
             // View Inventory
         case 5:
-            std::cout << "\nWood Bandages: " << player.getWoodBandages() << "\nMoney: " << player.getMoney() << "\n";
+            std::cout << "\nWood Bandages: " << player.getWoodBandages() << "\nMoney: " << player.getMoney() << "\nSeed: " << player.getSeed().getName() << "\n";
             break;
             // Save game to file
         case 6:
@@ -165,6 +165,7 @@ void saveGame(std::stack<Tree> treeStack, Player player)
     file << player.getTreesChopped() << "\n";
     file << player.getMoney() << "\n";
     file << player.getWoodBandages() << "\n";
+    file << player.getSeed().getLoadIndicator() << "\n";
 
     // Treestack is saved until its empty
     while (!treeStack.empty())
@@ -215,6 +216,10 @@ void loadGame(std::stack<Tree> &treeStack, Player &player)
 
     std::getline(file, tempStr);
     player.setWoodBandages(stoi(tempStr));
+
+    std::getline(file, tempStr);
+    loadSeed(stoi(tempStr), player);
+    player.getSeed().cringe();
 
     Tree tree("TEMP", 99);
 
@@ -293,4 +298,21 @@ Player createPlayer()
     Player player(playerName, 3, 1000);
 
     return player;
+}
+
+// Loading the correct seed
+void loadSeed(int seedLoadIndicator, Player &player)
+{
+    Seed seed;
+    HealthSeed hSeed;
+    AttackSeed aSeed;
+    DefenseSeed dSeed;
+    hSeed.cringe();
+    std::cout << seedLoadIndicator;
+    switch(seedLoadIndicator){
+        case 1: player.setSeed(hSeed); return;
+        case 2: player.setSeed(aSeed); return;
+        case 3: player.setSeed(dSeed); return;
+        default: player.setSeed(seed); std::cout << "BROBRONONO"; return;
+    }
 }

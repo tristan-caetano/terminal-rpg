@@ -1,8 +1,5 @@
 #include "TreeH.hpp"
 
-// Prototyping
-void store(std::stack<Tree> &treeStack, Player &player);
-
 // Main store function
 void store(std::stack<Tree> &treeStack, Player &player){
 
@@ -15,13 +12,9 @@ void store(std::stack<Tree> &treeStack, Player &player){
         std::cout << "\n*********STORE**********"
                   << "\nWhat would you like to do?\n"
                   << "\n1). Wood Bandages (50 M)"
-                  << "\n2). Create a new tree. (100 M)"
-                  << "\n3). View Trees."
-                  << "\n4). Buy Wood Bandages. (50 M)"
-                  << "\n5). View Inventory."
-                  << "\n6). Save game to file."
-                  << "\n7). Load game from file."
-                  << "\n8). Quit. (Unsaved progress will be lost.)"
+                  << "\n2). Health Seed (75 M)"
+                  << "\n3). Attack Seed (75 M)"
+                  << "\n4). Defense Seed (75 M)"
                   << "\n*********STORE**********\n";
 
         std::cin >> userIn;
@@ -39,6 +32,46 @@ void store(std::stack<Tree> &treeStack, Player &player){
                 {
                     std::cout << "\nYou don't have enough cash money bro.\n";
                 }
+                break;
+
+            case 2:
+                HealthSeed seed;
+                if((player.getSeed().getName() != seed.getName()) && player.getMoney() > 74){
+                    player.setSeed(seed);
+                    player.setMoney(player.getMoney() - 75);
+                } else if(player.getMoney() < 75) {
+                    std::cout << "\nYou already have this seed.\n";
+                }else{
+                    std::cout << "\nYou do NOT have enough money for this.\n";
+                }
+                break;
+
+                case 3:
+                AttackSeed seed;
+                if((player.getSeed().getName() != seed.getName()) && player.getMoney() > 74){
+                    player.setSeed(seed);
+                    player.setMoney(player.getMoney() - 75);
+                } else if(player.getMoney() < 75) {
+                    std::cout << "\nYou already have this seed.\n";
+                }else{
+                    std::cout << "\nYou do NOT have enough money for this.\n";
+                }
+                break;
+
+                case 4:
+                DefenseSeed seed;
+                if((player.getSeed().getName() != seed.getName()) && player.getMoney() > 74){
+                    player.setSeed(seed);
+                    player.setMoney(player.getMoney() - 75);
+                } else if(player.getMoney() < 75) {
+                    std::cout << "\nYou already have this seed.\n";
+                }else{
+                    std::cout << "\nYou do NOT have enough money for this.\n";
+                }
+                break;
+
+                default:
+                std::cout << "\nBro that is NOT an option.\n";
                 break;
         }
 

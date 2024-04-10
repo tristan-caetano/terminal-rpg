@@ -19,6 +19,7 @@ void fightPhase(std::stack<Tree> &treeStack, Player &player)
 
     // Keeping track of enemy health to calulate money awarded
     int enemyTotalHealth = enemyCurTree.getBark();
+    HealthSeed hs;
 
     // Do while for the actual fight
     do
@@ -29,7 +30,7 @@ void fightPhase(std::stack<Tree> &treeStack, Player &player)
         std::cout << "\n"
                   << (player.getName()) << "'s Tree: " << playerCurrTree.getType() << "\nPlayer Bark: " << playerCurrTree.getBark();
         std::cout << "\nEnemy Tree: " << enemyCurTree.getType() << "\nEnemy Bark: " << enemyCurTree.getBark();
-        std::cout << "\n\n1). Standard Chop\n2). Regain Bark\n";
+        std::cout << "\n\n1). Standard Chop\n2). Regain Bark\n3). Use Seed\n";
         std::cout << "********************FIGHT MENU********************\n";
         std::cin >> userIn;
         switch (userIn)
@@ -42,6 +43,12 @@ void fightPhase(std::stack<Tree> &treeStack, Player &player)
             player.setWoodBandages(player.getWoodBandages() - 1);
             playerCurrTree.gainBark(player);
             std::cout << "\nYou gave your " << playerCurrTree.getType() << " a wood bandage.\nIt now has " << playerCurrTree.getBark() << " bark.";
+            break;
+        case 3:
+            std::cout << player.getSeed().getName() << " ";
+            player.getSeed().cringe();
+            hs.cringe();
+            playerCurrTree = player.getSeed().seedSkill(playerCurrTree);
             break;
         default:
             std::cout << "\nBro that is NOT an option.\n";
@@ -103,15 +110,16 @@ std::stack<Tree> getEnemies(int numOfEnemies)
     for (i = 0; i < numOfEnemies; i++)
     {
         // Creating tree object
-        srand(time(NULL));
         Tree tree(enemyNames[rand() % 7], rand() % 101);
 
         if(!enemyStack.empty()){
 
             while((tree.getType()) == (enemyStack.top().getType())){
 
-                srand(time(NULL));
+                
                 Tree tree(enemyNames[rand() % 7], rand() % 101);
+
+                std::cout << "\n" << enemyStack.top().getType();
 
             }
         }
